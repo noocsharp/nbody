@@ -27,6 +27,12 @@ struct Vector3 {
         this->z += v2.z;
     }
 
+    void operator-=(const Vector3<T>& v2) {
+        this->x -= v2.x;
+        this->y -= v2.y;
+        this->z -= v2.z;
+    }
+
     Vector3<T> operator-(const Vector3<T>& v2) {
         Vector3 vec (this->x - v2.x, this->y - v2.y, this->z - v2.z);
         return vec;
@@ -87,7 +93,7 @@ class BodyManager {
                     Vector3<double> r = (*body)->pos - (*source)->pos;
                     double m = (*source)->mass;
                     double r2 = r.mag() * r.mag();
-                    accel += r.scaled(G*m/r2);
+                    accel -= r.scaled(G*m/r2);
                 }
                 accels[distance(bodies.begin(), body)] = accel;
             }
@@ -116,12 +122,11 @@ class BodyManager {
 };
 
 int main() {
-    cout << "Hello World" << endl;
     BodyManager bm;
     bm.addBody(new Body(10, Vector3<double>(0, 0, 0), Vector3<double>(0, 0, 0), Vector3<double>(0, 0, 0)));
     bm.addBody(new Body(20, Vector3<double>(100, 0, 0), Vector3<double>(0, 0, 0), Vector3<double>(0, 0, 0)));
 
-    long increment = 1;
+    long increment = 4000;
 
     timespec ts = {0, increment * 1000000};
 
